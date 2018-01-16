@@ -67,19 +67,19 @@ class GameField(object):
 
 			return push_to_left(merge(push_to_left(row)))
 
-			moves = {}
-			moves['Left'] = lambda value: [adjust_to_left(row) for row in value]
-			moves['Right'] = lambda value: invert(moves['Left'](invert(value)))
-			moves['Up'] = lambda value: transpose(moves['Left'](transpose(value)))
-			moves['Down'] = lambda value: transpose(moves['Right'](transpose(value)))
+		moves = {}
+		moves['Left'] = lambda value: [adjust_to_left(row) for row in value]
+		moves['Right'] = lambda value: invert(moves['Left'](invert(value)))
+		moves['Up'] = lambda value: transpose(moves['Left'](transpose(value)))
+		moves['Down'] = lambda value: transpose(moves['Right'](transpose(value)))
 
-			if(direction in moves):
-				if(self.checkMove(direction)):
-					self.value = moves(direction)(self.value)
-					self.generator()
-					return True
-				else:
-					return False
+		if(direction in moves):
+			if(self.checkMove(direction)):
+				self.value = moves(direction)(self.value)
+				self.generator()
+				return True
+			else:
+				return False
 
 	def checkMove(self, direction):
 		def checkMove_left(row):
