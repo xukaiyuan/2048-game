@@ -1,6 +1,7 @@
 #coding=utf-8  
 import random  
 from random import randrange, choice
+from collections import defaultdict
 import sys  
 import pygame  
 from pygame.locals import * 
@@ -29,7 +30,9 @@ class GameField(object):
 			new = 4
 		else:
 			new = 2
-		(i, j) = choice([(i, j) for i in range(self.height) for j in range(self.width) if self.value[i][j] == 0])
+		(i, j) = choice([(i, j) for i in range(self.width) for j in range(self.height) if self.value[i][j] == 0])
+		
+                                   
 		self.value[i][j] = new
 
 	def reset(self):
@@ -46,7 +49,7 @@ class GameField(object):
 		def adjust_to_left(row):
 			def push_to_left(row):
 				new_row = [i for i in row if(i != 0)]
-				new_row += [0 for i in (len(row) - len(new_row))]
+				new_row += [0 for i in range(len(row) - len(new_row))]
 				return new_row
 
 			def merge(row):
@@ -75,7 +78,7 @@ class GameField(object):
 
 		if(direction in moves):
 			if(self.checkMove(direction)):
-				self.value = moves(direction)(self.value)
+				self.value = moves[direction](self.value)
 				self.generator()
 				return True
 			else:
@@ -153,38 +156,30 @@ def main():
 	#font set
 	map_font = pygame.font.Font(None, int(PIXEL * 2 / 3))
 	score_font = pygame.font.Font(None, int(SCORE_PIXEL * 2 / 3))
-	#clock = pygame.time.Clock()
+	clock = pygame.time.Clock()
 	display(map, screen, block, map_font, score_block, score_font)
 
 	#font set
 
 	while(not map.isGameover()):
+		clock.tick(12)
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				sys.exit();
 
 		key = pygame.key.get_pressed()
-		if(key[K_w]):
+		if(key[K_UP]):
 			map.move('Up')
-		elif(key[K_s]):
+		elif(key[K_DOWN]):
 			map.move('Down')
-		elif(key[K_a]):
+		elif(key[K_LEFT]):
 			map.move('Left')
-		elif(key[K_d]):
+		elif(key[K_RIGHT]):
 			map.move('Right')
 
 		display(map, screen, block, map_font, score_block, score_font)
+	pygame.time.delay(3000)
 
 
 if __name__=="__main__":
 	main()
-
-
-
-
-
-
-
-		
-
-
