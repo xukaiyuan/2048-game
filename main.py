@@ -40,32 +40,33 @@ class GameField(object):
 		self.generator()
 		self.generator()
 
-	def adjust_to_left(row):
-		def push_to_left(row):
-			new_row = [i for i in row if(i != 0)]
-			new_row += [0 for i in (len(row) - len(new_row))]
-			return new_row
-
-		def merge(row):
-			pair = False
-			new_row = []
-			for i in range(len(row)):
-				if(pair):
-					new_row.append(2 * row[i])
-					self.curScore += 2 * row[i]
-					pair = False
-				else:
-					if(i < len(row) - 1 and row[i] == row[i + 1]):
-						pair = True
-						new_row.append(0)
-					else:
-						new_row.append(row[i])
-			return new_row
-
-		return push_to_left(merge(push_to_left(row)))
+	
 
 	def move(self, direction):
 		def adjust_to_left(row):
+			def push_to_left(row):
+				new_row = [i for i in row if(i != 0)]
+				new_row += [0 for i in (len(row) - len(new_row))]
+				return new_row
+
+			def merge(row):
+				pair = False
+				new_row = []
+				for i in range(len(row)):
+					if(pair):
+						new_row.append(2 * row[i])
+						self.curScore += 2 * row[i]
+						pair = False
+					else:
+						if(i < len(row) - 1 and row[i] == row[i + 1]):
+							pair = True
+							new_row.append(0)
+						else:
+							new_row.append(row[i])
+				return new_row
+
+			return push_to_left(merge(push_to_left(row)))
+
 			moves = {}
 			moves['Left'] = lambda value: [adjust_to_left(row) for row in value]
 			moves['Right'] = lambda value: invert(moves['Left'](invert(value)))
