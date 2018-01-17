@@ -95,17 +95,13 @@ class GameField(object):
 			return any(judge(i) for i in range(len(row) - 1))
 
 		check = {}
-		check['Left'] = lambda value: [checkMove_left(row) for row in value]
+		check['Left'] = lambda value: any(checkMove_left(row) for row in value)
 		check['Right'] = lambda value: check['Left'](invert(value))
 		check['Up'] = lambda value: check['Left'](transpose(value))
 		check['Down'] = lambda value: check['Right'](transpose(value))
 
 		if(direction in check):
-			return check[direction]
-
-
-
-			(self.value)
+			return check[direction](self.value)
 		else:
 			return False
 
